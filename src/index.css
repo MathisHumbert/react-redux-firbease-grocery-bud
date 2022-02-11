@@ -158,6 +158,18 @@ main {
   display: grid;
   place-items: center;
 }
+
+/*
+=============== 
+Header
+===============
+*/
+header h3 {
+  color: var(--clr-primary-1);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
 /*
 =============== 
 Grocery List
@@ -191,11 +203,6 @@ Grocery List
 .alert-success {
   color: #155724;
   background: #d4edda;
-}
-.grocery-form h3 {
-  color: var(--clr-primary-1);
-  margin-bottom: 1.5rem;
-  text-align: center;
 }
 .form-control {
   display: flex;
