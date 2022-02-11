@@ -43,6 +43,7 @@ const grocerySlice = createSlice({
         if (item.id === action.payload) {
           item.name = state.inputValue;
         }
+        return item;
       });
 
       state.inputValue = '';
