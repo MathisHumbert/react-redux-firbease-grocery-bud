@@ -9,9 +9,19 @@ const initialState = {
 const alertSlice = createSlice({
   name: 'alert',
   initialState,
-  reducers: {},
+  reducers: {
+    startAlert: (state, action) => {
+      state.alert = true;
+      state.alertType = action.payload.type;
+      state.alertMsg = action.payload.msg;
+    },
+
+    stopAlert: (state) => {
+      state = initialState;
+    },
+  },
 });
 
-export const {} = alertSlice.actions;
+export const { startAlert, stopAlert } = alertSlice.actions;
 
 export default alertSlice.reducer;
