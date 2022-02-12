@@ -17,7 +17,9 @@ const alertSlice = createSlice({
     },
 
     stopAlert: (state) => {
-      state = initialState;
+      state.alert = false;
+      state.alertType = '';
+      state.alertMsg = '';
     },
   },
 });

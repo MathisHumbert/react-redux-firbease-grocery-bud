@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { startAlert } from '../features/alertSlice';
 import { toggleLogin } from '../features/userSlice';
-import { useState } from 'react';
 import Alert from './Alert';
 
 const LoginSignUp = () => {
@@ -24,6 +25,7 @@ const LoginSignUp = () => {
       (!login && (!email || !password || !name))
     ) {
       // ALERT
+      dispatch(startAlert({ type: 'danger', msg: 'All fields are required' }));
     }
 
     // LOGIN
