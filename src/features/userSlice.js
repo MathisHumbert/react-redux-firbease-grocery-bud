@@ -4,6 +4,8 @@ const initialState = {
   user: {},
   userLoggedIn: false,
   login: true,
+  alertUser: false,
+  alertUserMsg: '',
 };
 
 const userSlice = createSlice({

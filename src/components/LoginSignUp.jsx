@@ -1,14 +1,53 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { toggleLogin } from '../features/userSlice';
+import { useState } from 'react';
+import Alert from './Alert';
 
 const LoginSignUp = () => {
   const dispatch = useDispatch();
   const { userLoggedIn, login } = useSelector((state) => state.user);
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+
+  const { name, email, password } = formData;
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      (login && (!email || !password)) ||
+      (!login && (!email || !password || !name))
+    ) {
+      // ALERT
+    }
+
+    // LOGIN
+    if (login) {
+      console.log(email, password);
+    }
+    // SIGN UP
+    else {
+      console.log(name, email, password);
+    }
+  };
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
   return (
     <aside className={userLoggedIn ? '' : 'open'}>
-      <form className='section-center aside-container'>
+      <form className='section-center aside-container' onSubmit={onSubmit}>
         <h3>{login ? 'login' : 'sign up'}</h3>
+        <Alert />
 
         {!login && (
           <div className='form-control'>
@@ -18,6 +57,8 @@ const LoginSignUp = () => {
               className='grocery'
               id='name'
               placeholder='Name'
+              value={name}
+              onChange={onChange}
             />
           </div>
         )}
@@ -29,6 +70,8 @@ const LoginSignUp = () => {
             className='grocery'
             id='email'
             placeholder='Email'
+            value={email}
+            onChange={onChange}
           />
         </div>
 
@@ -39,6 +82,8 @@ const LoginSignUp = () => {
             className='grocery'
             id='password'
             placeholder='Password'
+            value={password}
+            onChange={onChange}
           />
         </div>
 
