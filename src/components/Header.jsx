@@ -3,6 +3,7 @@ import { auth } from '../firebase.config';
 import { signOut } from 'firebase/auth';
 import { resetUser } from '../features/userSlice';
 import { startAlert } from '../features/alertSlice';
+import Alert from './Alert';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Header = () => {
   return (
     <header>
       <h3>{user.name}'s grocery bud</h3>
+      <Alert />
       <button className='login-btn' onClick={logoutUser}>
         logout
       </button>

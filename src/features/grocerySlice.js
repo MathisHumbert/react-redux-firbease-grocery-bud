@@ -17,14 +17,12 @@ const grocerySlice = createSlice({
       state.inputValue = action.payload;
     },
 
-    addGrocery: (state, action) => {
-      state.groceries = action.payload;
+    resetInputValue: (state) => {
+      state.inputValue = '';
     },
 
-    deleteGrocery: (state, action) => {
-      state.groceries = state.groceries.filter(
-        (item) => item.id !== action.payload
-      );
+    addGrocery: (state, action) => {
+      state.groceries = action.payload;
     },
 
     setEdit: (state, action) => {
@@ -33,32 +31,20 @@ const grocerySlice = createSlice({
       state.inputValue = action.payload.name;
     },
 
-    editGrocery: (state, action) => {
-      state.groceries.map((item) => {
-        if (item.id === action.payload) {
-          item.name = state.inputValue;
-        }
-        return item;
-      });
-
+    resetEdit: (state) => {
       state.inputValue = '';
       state.edit = false;
       state.editId = '';
-    },
-
-    clearGrocery: (state) => {
-      state.groceries = [];
     },
   },
 });
 
 export const {
   setInputValue,
+  resetInputValue,
   addGrocery,
-  deleteGrocery,
   setEdit,
-  editGrocery,
-  clearGrocery,
+  resetEdit,
 } = grocerySlice.actions;
 
 export default grocerySlice.reducer;

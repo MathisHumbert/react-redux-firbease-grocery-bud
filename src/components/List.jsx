@@ -1,9 +1,18 @@
+import { deleteDoc, doc } from 'firebase/firestore';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { deleteGrocery, setEdit } from '../features/grocerySlice';
+import { setEdit } from '../features/grocerySlice';
+import { startAlert } from '../features/alertSlice';
+import { db } from '../firebase.config';
 
 const List = ({ name, id }) => {
   const dispatch = useDispatch();
+
+  const onDelete = (id) => {
+    const docRef = doc(db, 'grocery', id);
+    deleteDoc(docRef);
+    dispatch(startAlert({ type: 'danger', msg: 'item removed' }));
+  };
 
   return (
     <article className='grocery-item'>
@@ -19,7 +28,7 @@ const List = ({ name, id }) => {
         <button
           type='button'
           className='delete-btn'
-          onClick={() => dispatch(deleteGrocery(id))}
+          onClick={() => onDelete(id)}
         >
           <FaTrash />
         </button>

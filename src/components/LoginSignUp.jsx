@@ -40,7 +40,7 @@ const LoginSignUp = () => {
         );
         const user = userCredential.user;
         dispatch(setUser({ name: user.displayName, id: user.uid }));
-        dispatch(startAlert({ type: 'success', msg: 'User sign up' }));
+        dispatch(startAlert({ type: 'success', msg: 'User login' }));
       } catch (error) {
         dispatch(startAlert({ type: 'danger', msg: 'Invalid Credentials' }));
       }
@@ -56,7 +56,7 @@ const LoginSignUp = () => {
         );
         updateProfile(auth.currentUser, { displayName: name });
         const user = userCredential.user;
-        dispatch(setUser({ name: user.displayName, id: user.uid }));
+        dispatch(setUser({ name: name, id: user.uid }));
         dispatch(startAlert({ type: 'success', msg: 'User sign up' }));
       } catch (error) {
         dispatch(

@@ -1,28 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { collection } from 'firebase/firestore';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import {
-  addGrocery,
   setInputValue,
-  editGrocery,
+  resetEdit,
+  resetInputValue,
 } from '../features/grocerySlice';
+import { startAlert } from '../features/alertSlice';
 
 const Form = () => {
   const dispatch = useDispatch();
   const { inputValue, edit, editId } = useSelector((state) => state.grocery);
+  const { user } = useSelector((state) => state.user);
 
   const onSubmit = (e) => {
     e.preventDefault('');
 
     // UPDATE
     if (edit) {
-      dispatch(editGrocery(editId));
+      const docRef = doc(db, 'grocery', editId);
+      updateDoc(docRef, {
+        name: inputValue,
+      });
+      dispatch(startAlert({ type: 'success', msg: 'Value updated' }));
+      dispatch(resetEdit());
     }
     // CREATE
     else {
-      dispatch(addGrocery(editId));
+      const colRef = collection(db, 'grocery');
+      addDoc(colRef, {
+        userRef: user.id,
+        name: inputValue,
+      });
+      dispatch(resetInputValue());
+      dispatch(startAlert({ type: 'success', msg: 'Item added to the list' }));
     }
-    setInputValue('');
   };
 
   return (
