@@ -1,10 +1,27 @@
+import { useEffect } from 'react';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearGrocery } from '../features/grocerySlice';
+import { addGrocery, clearGrocery } from '../features/grocerySlice';
 import List from './List';
+import { db } from '../firebase.config';
 
 const Grocery = () => {
   const dispatch = useDispatch();
   const { groceries } = useSelector((state) => state.grocery);
+
+  useEffect(() => {
+    const colRef = collection(db, 'grocery');
+    onSnapshot(colRef, (snapchot) => {
+      let tempGroceries = [];
+      snapchot.docs.forEach((doc) => {
+        tempGroceries.push({
+          id: doc.id,
+          name: doc.data().name,
+        });
+      });
+      dispatch(addGrocery(tempGroceries));
+    });
+  }, []);
 
   return (
     <div className='grocery-container'>

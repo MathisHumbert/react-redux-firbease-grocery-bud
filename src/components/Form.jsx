@@ -1,4 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { collection } from 'firebase/firestore';
+import { db } from '../firebase.config';
 import {
   addGrocery,
   setInputValue,
@@ -12,10 +14,13 @@ const Form = () => {
   const onSubmit = (e) => {
     e.preventDefault('');
 
+    // UPDATE
     if (edit) {
       dispatch(editGrocery(editId));
-    } else {
-      dispatch(addGrocery(inputValue));
+    }
+    // CREATE
+    else {
+      dispatch(addGrocery(editId));
     }
     setInputValue('');
   };

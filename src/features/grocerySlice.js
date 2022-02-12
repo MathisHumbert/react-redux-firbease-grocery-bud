@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import uniqid from 'uniqid';
 
 const initialState = {
   groceries: [],
@@ -19,11 +18,7 @@ const grocerySlice = createSlice({
     },
 
     addGrocery: (state, action) => {
-      state.groceries.push({
-        id: uniqid(),
-        name: action.payload,
-      });
-      state.inputValue = '';
+      state.groceries = action.payload;
     },
 
     deleteGrocery: (state, action) => {
