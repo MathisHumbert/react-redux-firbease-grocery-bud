@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import { startAlert } from '../features/alertSlice';
-import { toggleLogin } from '../features/userSlice';
+import { setUser, toggleLogin } from '../features/userSlice';
+import { auth } from '../firebase.config';
 import Alert from './Alert';
 
 const LoginSignUp = () => {
@@ -17,24 +22,47 @@ const LoginSignUp = () => {
 
   const { name, email, password } = formData;
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      (login && (!email || !password)) ||
-      (!login && (!email || !password || !name))
-    ) {
-      // ALERT
+    if (!email || !password || (!login && !name)) {
       dispatch(startAlert({ type: 'danger', msg: 'All fields are required' }));
+      return;
     }
 
     // LOGIN
     if (login) {
-      console.log(email, password);
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+        dispatch(setUser({ name: user.displayName, id: user.uid }));
+        dispatch(startAlert({ type: 'success', msg: 'User sign up' }));
+      } catch (error) {
+        dispatch(startAlert({ type: 'danger', msg: 'Invalid Credentials' }));
+      }
     }
+
     // SIGN UP
     else {
-      console.log(name, email, password);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        updateProfile(auth.currentUser, { displayName: name });
+        const user = userCredential.user;
+        dispatch(setUser({ name: user.displayName, id: user.uid }));
+        dispatch(startAlert({ type: 'success', msg: 'User sign up' }));
+      } catch (error) {
+        dispatch(
+          startAlert({ type: 'danger', msg: 'User did not sign up! Try later' })
+        );
+      }
     }
   };
 

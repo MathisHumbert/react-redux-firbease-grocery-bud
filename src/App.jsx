@@ -1,21 +1,25 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { auth } from './firebase.config';
+import { onAuthStateChanged } from 'firebase/auth';
 import Form from './components/Form';
 import Grocery from './components/Grocery';
 import Header from './components/Header';
 import LoginSignUp from './components/LoginSignUp';
+import { setUser } from './features/userSlice';
 
 function App() {
+  const dispatch = useDispatch();
   const { userLoggedIn } = useSelector((state) => state.user);
-  const user = auth.currentUser;
-  console.log(user);
 
   useEffect(() => {
-    if (user) {
-      console.log('user:', user);
-    }
-  }, [user]);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser({ name: user.displayName, id: user.uid }));
+      }
+    });
+    return () => unsub();
+  }, []);
 
   if (!userLoggedIn) {
     return <LoginSignUp />;
